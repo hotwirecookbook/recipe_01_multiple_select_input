@@ -1,0 +1,2 @@
+module Profiles::TechnologiesHelper
+end

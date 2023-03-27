@@ -1,0 +1,25 @@
+<%= turbo_frame_tag "technologies" do %>
+  <% if params[:query].present? %>
+    <ul class="absolute mt-1 z-10 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm" id="options" role="listbox">
+      <% @technologies.each do |technology| %>
+        <li class="relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900" role="option" tabindex="-1">
+          <%= button_to technology.name,
+            profile_skills_path(skill: { technology_id: technology.id }),
+            class: "block truncate",
+            data: {turbo_frame: "skills"} %>
+        </li>
+      <% end %>
+      <% unless @technologies.any? %>
+        <li class="relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900" role="option" tabindex="-1">
+          <%= button_to "Add #{params[:query]}",
+            profile_technologies_path(params[:profile_id], technology: {
+              name: params[:query],
+              skills_attributes: [{
+                profile_id: params[:profile_id]
+              }]
+            }), method: :post, class: "block truncate", data: {turbo_frame: "skills"} %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>

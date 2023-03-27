@@ -1,0 +1,43 @@
+<div class="space-y-10 divide-y divide-gray-900/10">
+  <div class="grid grid-cols-1 gap-y-8 gap-x-8 pt-10 md:grid-cols-3">
+    <div class="px-4 sm:px-0">
+      <h2 class="text-base font-semibold leading-7 text-gray-900">Skills</h2>
+    </div>
+
+    <div class="w-full md:col-span-2 px-4 py-6 sm:p-8 bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl relative">     
+      <%= turbo_frame_tag "skills" do %>
+        <% if @profile.skills.any? %>
+          <div class="flex flex-wrap mb-3 space-x-3">
+            <% @profile.skills.each do |skill| %>
+              <span id="<%= dom_id(skill) %>" class="inline-flex items-center rounded-full bg-indigo-100 py-0.5 pl-2 pr-0.5 text-xs font-medium text-indigo-700">
+                <%= skill.name %>
+                <%= button_to skill_path(skill), class: "ml-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-indigo-400 hover:bg-indigo-200 hover:text-indigo-500 focus:bg-indigo-500 focus:text-white focus:outline-none", method: :delete do %>
+                  <span class="sr-only">Remove small option</span>
+                  <svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+                    <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7" />
+                  </svg>
+                <% end %>
+              </span>
+            <% end %>
+          </div>
+        <% end %>
+
+        <%= form_tag profile_technologies_path(@profile),
+          method: :get,
+          data: {controller: "autosubmit", turbo_frame: "technologies"} do %>
+          <input
+            id="combobox"
+            name="query"
+            type="text"
+            data-action="input->autosubmit#debouncedSubmit"
+            class="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-12 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+            role="combobox"
+            aria-controls="options"
+            aria-expanded="false">
+        <% end %>
+
+        <%= turbo_frame_tag "technologies", src: profile_technologies_path(@profile) %>
+      <% end %>
+    </div>
+  </div>
+</div>
